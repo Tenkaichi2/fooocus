@@ -228,7 +228,7 @@ with shared.gradio_root:
 
                 seed_random.change(random_checked, inputs=[seed_random], outputs=[image_seed], queue=False)
 
-                gr.HTML(f'<a href="/file={get_current_html_path()}" target="_blank">\U0001F4DA History Log</a>')
+                #gr.HTML(f'<a href="/file={get_current_html_path()}" target="_blank">\U0001F4DA History Log</a>')
 
             with gr.Tab(label='Style'):
                 style_selections = gr.CheckboxGroup(show_label=False, container=False,
