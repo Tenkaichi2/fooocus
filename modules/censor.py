@@ -1,3 +1,5 @@
+# modified version of https://github.com/AUTOMATIC1111/stable-diffusion-webui-nsfw-censor/blob/master/scripts/censor.py
+
 import numpy as np
 import torch
 import modules.core as core
@@ -36,7 +38,9 @@ def check_safety(x_image):
 
 def censor_single(x):
     x_checked_image, has_nsfw_concept = check_safety(x)
-    print(has_nsfw_concept)
+
+    # replace image with black pixels, keep dimensions
+    # workaround due to different numpy / pytorch image matrix format
     if has_nsfw_concept[0]:
         imageshape = x_checked_image.shape
         x_checked_image = np.zeros((imageshape[0], imageshape[1], 3), dtype = np.uint8)
