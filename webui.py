@@ -204,7 +204,7 @@ with shared.gradio_root:
                 performance_selection = gr.Radio(label='Performance', choices=['Speed', 'Quality'], value='Speed')
                 aspect_ratios_selection = gr.Radio(label='Aspect Ratios', choices=modules.path.available_aspect_ratios,
                                                    value=modules.path.default_aspect_ratio, info='width × height')
-                image_number = gr.Slider(label='Image Number', minimum=1, maximum=32, step=1, value=modules.path.default_image_number)
+                image_number = gr.Slider(label='Image Number', minimum=1, maximum=modules.path.default_max_image_number, step=1, value=modules.path.default_image_number)
                 negative_prompt = gr.Textbox(label='Negative Prompt', show_label=True, placeholder="Type prompt here.",
                                              info='Describing what you do not want to see.', lines=2,
                                              value=modules.path.default_prompt_negative)
