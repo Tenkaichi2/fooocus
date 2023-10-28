@@ -56,9 +56,10 @@ def worker():
         if not isinstance(imgs, list):
             imgs = [imgs]
 
-        progressbar(progressbar_index, 'Checking for NSFW content ...')
-        imgs = censor_batch(imgs)
-        progressbar(progressbar_index, 'Adding to results ...')
+        if modules.path.default_black_out_nsfw:
+            progressbar(progressbar_index, 'Checking for NSFW content ...')
+            imgs = censor_batch(imgs)
+            progressbar(progressbar_index, 'Adding to results ...')
 
         global_results = global_results + imgs
 

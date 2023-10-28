@@ -181,6 +181,16 @@ default_aspect_ratio = get_config_item_or_set_default(
     default_value='1152*896' if '1152*896' in available_aspect_ratios else available_aspect_ratios[0],
     validator=lambda x: x in available_aspect_ratios
 )
+default_disable_log = get_config_item_or_set_default(
+    key='default_disable_log',
+    default_value=False,
+    validator=lambda x: isinstance(x, bool)
+)
+default_black_out_nsfw = get_config_item_or_set_default(
+    key='default_black_out_nsfw',
+    default_value=False,
+    validator=lambda x: isinstance(x, bool)
+)
 
 if preset is None:
     # Do not overwrite user config if preset is applied.
