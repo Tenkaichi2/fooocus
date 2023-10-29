@@ -363,7 +363,7 @@ with shared.gradio_root:
                 notification_file = 'notification.mp3'
                 if os.path.exists(notification_file):
                     notification = gr.State(value=notification_file)
-                    notification_input = gr.Audio(label='Notification', interactive=True, value=notification_file, elem_id='audio_notification', visible=False, show_edit_button=False)
+                    notification_input = gr.Audio(label='Notification', interactive=True, elem_id='audio_notification', visible=False, show_edit_button=False)
 
                     def play_notification_checked(r, notification):
                         return gr.update(visible=r, value=notification if r else None)
