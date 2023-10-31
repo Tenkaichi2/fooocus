@@ -41,6 +41,13 @@ def generate_clicked(*args):
         if len(worker.outputs) > 0:
             flag, product = worker.outputs.pop(0)
             if flag == 'preview':
+
+                # help bad internet connection by skipping duplicated preview
+                if len(worker.outputs) > 0:  # if we have the next item
+                    if worker.outputs[0][0] == 'preview':   # if the next item is also a preview
+                        # print('Skipped one preview for better internet connection.')
+                        continue
+
                 percentage, title, image = product
                 yield gr.update(visible=True, value=modules.html.make_progress_html(percentage, title)), \
                     gr.update(visible=True, value=image) if image is not None else gr.update(), \
@@ -172,38 +179,19 @@ with shared.gradio_root:
             input_image_checkbox.change(lambda x: gr.update(visible=x), inputs=input_image_checkbox, outputs=image_input_panel, queue=False, _js=switch_js)
             ip_advanced.change(lambda: None, queue=False, _js=down_js)
 
-            current_tab = gr.Textbox(value='uov', visible=False)
-
+            current_tab = gr.State(value='uov')
             default_image = gr.State(value=None)
 
-            def update_default_image(x):
-                if isinstance(x, dict):
-                    default_image = x['image']
-                else:
-                    default_image = x
-                return default_image
+            lambda_img = lambda x: x['image'] if isinstance(x, dict) else x
+            uov_input_image.upload(lambda_img, inputs=uov_input_image, outputs=default_image, queue=False)
+            inpaint_input_image.upload(lambda_img, inputs=inpaint_input_image, outputs=default_image, queue=False)
 
-            def clear_default_image():
-                return None
+            uov_input_image.clear(lambda: None, outputs=default_image, queue=False)
+            inpaint_input_image.clear(lambda: None, outputs=default_image, queue=False)
 
-            uov_input_image.upload(update_default_image, inputs=uov_input_image, outputs=default_image, queue=False)
-            inpaint_input_image.upload(update_default_image, inputs=inpaint_input_image, outputs=default_image, queue=False)
-
-            uov_input_image.clear(clear_default_image, outputs=default_image, queue=False)
-            inpaint_input_image.clear(clear_default_image, outputs=default_image, queue=False)
-
-            def select_uov_tab(image):
-                return 'uov', image
-
-            def select_inpaint_tab(image):
-                return 'inpaint', image
-
-            def select_ip_tab(image):
-                return 'ip', image
-
-            uov_tab.select(fn=select_uov_tab, inputs=[default_image], outputs=[current_tab, uov_input_image], queue=False, _js=down_js)
-            inpaint_tab.select(fn=select_inpaint_tab, inputs=[default_image], outputs=[current_tab, inpaint_input_image], queue=False, _js=down_js)
-            ip_tab.select(fn=select_ip_tab, inputs=[default_image], outputs=[current_tab], queue=False, _js=down_js)
+            uov_tab.select(lambda x: ['uov', x], inputs=default_image, outputs=[current_tab, uov_input_image], queue=False, _js=down_js)
+            inpaint_tab.select(lambda x: ['inpaint', x], inputs=default_image, outputs=[current_tab, inpaint_input_image], queue=False, _js=down_js)
+            ip_tab.select(lambda: 'ip', outputs=[current_tab], queue=False, _js=down_js)
 
         with gr.Column(scale=1, visible=modules.path.default_advanced_checkbox) as advanced_column:
             with gr.Tab(label='Setting'):
@@ -248,7 +236,10 @@ with shared.gradio_root:
                     refiner_model = gr.Dropdown(label='Refiner (SDXL or SD 1.5)', choices=['None'] + modules.path.model_filenames, value=modules.path.default_refiner_model_name, show_label=True)
 
                 refiner_switch = gr.Slider(label='Refiner Switch At', minimum=0.1, maximum=1.0, step=0.0001,
-                                           info='When to switch from the base model to refiner.',
+                                           info='Use 0.4 for SD1.5 realistic models; '
+                                                'or 0.667 for SD1.5 anime models; '
+                                                'or 0.8 for XL-refiners; '
+                                                'or any value for switching two SDXL models.',
                                            value=modules.path.default_refiner_switch,
                                            visible=modules.path.default_refiner_model_name != 'None')
 
