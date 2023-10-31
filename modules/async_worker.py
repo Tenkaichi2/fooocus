@@ -645,6 +645,7 @@ def worker():
         if len(buffer) > 0:
             task = buffer.pop(0)
             outputs = task[0]
+            global_results = []
             try:
                 handler(task)
             except:
