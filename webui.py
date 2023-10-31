@@ -41,6 +41,13 @@ def generate_clicked(*args):
         if len(worker.outputs) > 0:
             flag, product = worker.outputs.pop(0)
             if flag == 'preview':
+
+                # help bad internet connection by skipping duplicated preview
+                if len(worker.outputs) > 0:  # if we have the next item
+                    if worker.outputs[0][0] == 'preview':   # if the next item is also a preview
+                        # print('Skipped one preview for better internet connection.')
+                        continue
+
                 percentage, title, image = product
                 yield gr.update(visible=True, value=modules.html.make_progress_html(percentage, title)), \
                     gr.update(visible=True, value=image) if image is not None else gr.update(), \
@@ -228,7 +235,10 @@ with shared.gradio_root:
                     refiner_model = gr.Dropdown(label='Refiner (SDXL or SD 1.5)', choices=['None'] + modules.path.model_filenames, value=modules.path.default_refiner_model_name, show_label=True)
 
                 refiner_switch = gr.Slider(label='Refiner Switch At', minimum=0.1, maximum=1.0, step=0.0001,
-                                           info='When to switch from the base model to refiner.',
+                                           info='Use 0.4 for SD1.5 realistic models; '
+                                                'or 0.667 for SD1.5 anime models; '
+                                                'or 0.8 for XL-refiners; '
+                                                'or any value for switching two SDXL models.',
                                            value=modules.path.default_refiner_switch,
                                            visible=modules.path.default_refiner_model_name != 'None')
 
