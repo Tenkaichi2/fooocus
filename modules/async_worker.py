@@ -58,7 +58,6 @@ def worker():
         if modules.path.default_black_out_nsfw:
             progressbar(outputs, progressbar_index, 'Checking for NSFW content ...')
             imgs = censor_batch(imgs)
-            progressbar(outputs, progressbar_index, 'Adding to results ...')
 
         global_results = global_results + imgs
 
@@ -90,6 +89,8 @@ def worker():
                 return
             if C != Cn:
                 return
+
+        progressbar(outputs, 100, 'Building Image Wall ...')
 
         cols = float(len(global_results)) ** 0.5
         cols = int(math.ceil(cols))
@@ -562,7 +563,7 @@ def worker():
             done_steps = current_task_id * steps + step
             outputs.value.append(['preview', (
                 int(15.0 + 85.0 * float(done_steps) / float(all_steps)),
-                f'Step {step}/{total_steps} in the {current_task_id + 1}-th Sampling',
+                f'Sampling Image {current_task_id + 1}/{image_number}, Step {step + 1}/{total_steps} ...',
                 y)])
 
         for current_task_id, task in enumerate(tasks):
