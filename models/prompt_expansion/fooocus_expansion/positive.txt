@@ -306,6 +306,7 @@ healthy
 heartfelt
 heavenly
 heroic
+highly
 historic
 holistic
 holy
@@ -626,6 +627,7 @@ upheld
 valiant
 valued
 varied
+very
 vibrant
 virtuous
 vivid
