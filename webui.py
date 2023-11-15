@@ -13,6 +13,7 @@ import modules.gradio_hijack as grh
 import modules.advanced_parameters as advanced_parameters
 import modules.style_sorter as style_sorter
 import args_manager
+import fcbh.model_management as model_management
 import copy
 
 from modules.sdxl_styles import legal_style_names
