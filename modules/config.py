@@ -273,11 +273,6 @@ default_overwrite_switch = get_config_item_or_set_default(
     default_value=-1,
     validator=lambda x: isinstance(x, int)
 )
-default_disable_log = get_config_item_or_set_default(
-    key='default_disable_log',
-    default_value=False,
-    validator=lambda x: isinstance(x, bool)
-)
 default_black_out_nsfw = get_config_item_or_set_default(
     key='default_black_out_nsfw',
     default_value=False,
