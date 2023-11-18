@@ -56,12 +56,12 @@ def worker():
         print(f'[Fooocus] {text}')
         async_task.yields.append(['preview', (number, text, None)])
 
-    def yield_result(async_task, imgs, do_not_show_finished_images=False):
+    def yield_result(async_task, imgs, do_not_show_finished_images=False, progressbar_index=13):
         if not isinstance(imgs, list):
             imgs = [imgs]
 
         if modules.config.default_black_out_nsfw:
-            progressbar(progressbar_index, 'Checking for NSFW content ...')
+            progressbar(async_task, progressbar_index, 'Checking for NSFW content ...')
             imgs = censor_batch(imgs)
 
         async_task.results = async_task.results + imgs
