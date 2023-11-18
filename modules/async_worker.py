@@ -61,7 +61,7 @@ def worker():
             imgs = [imgs]
 
         if modules.config.default_black_out_nsfw:
-            progressbar(progressbar_index, 'Checking for NSFW content ...')
+            progressbar(async_task, progressbar_index, 'Checking for NSFW content ...')
             imgs = censor_batch(imgs)
 
         async_task.results = async_task.results + imgs
